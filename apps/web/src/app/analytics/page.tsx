@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowDownToLine, ArrowUpRight, BarChart3, ChevronDown, QrCode } from "lucide-react";
+import { ArrowDownToLine, BarChart3, ChevronDown, QrCode } from "lucide-react";
 import AnalyticsCharts from "@/components/AnalyticsCharts";
 
 export default function AnalyticsPage() {

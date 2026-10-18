@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import QRCodeCanvas from '@/components/QRCodeCanvas'
 import Customizer from '@/components/Customizer'

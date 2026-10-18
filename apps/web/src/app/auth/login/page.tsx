@@ -5,20 +5,21 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function LoginPage() {
-  const supabase = createClient()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    const supabase = createClient()
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         router.push('/')
       }
     })
-  }, [router, supabase])
+  }, [router])
 
   const signInWithGoogle = async () => {
     setLoading(true)
+    const supabase = createClient()
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
