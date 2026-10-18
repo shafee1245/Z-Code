@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: zcode-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: zcode
+      POSTGRES_USER: zcode_user
+      POSTGRES_PASSWORD: zcode_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - zcode-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: zcode-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - zcode-network
+
+  # FastAPI Backend
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    container_name: zcode-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://zcode_user:zcode_password@postgres:5432/zcode
+      REDIS_URL: redis://redis:6379
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      CORS_ORIGINS: http://localhost:3000,http://web:3000
+      FRONTEND_URL: http://localhost:3000
+      API_SECRET_KEY: dev_secret_key_change_in_production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ../apps/api:/app
+    networks:
+      - zcode-network
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Next.js Frontend
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+    container_name: zcode-web
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    volumes:
+      - ../apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - zcode-network
+    command: npm run dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  zcode-network:
+    driver: bridge

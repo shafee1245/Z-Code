@@ -1,0 +1,23 @@
+{
+  "name": "qr-generator-saas",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "packages/types",
+    "packages/database"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,green \"npm run dev:web\" \"npm run dev:api\"",
+    "dev:web": "npm --workspace @qr-saas/web run dev",
+    "dev:api": "cd apps/api && uvicorn src.main:app --reload --host 0.0.0.0 --port 8000",
+    "build": "npm --workspace @qr-saas/web run build",
+    "lint": "npm --workspace @qr-saas/web run lint",
+    "test:api": "cd apps/api && pytest",
+    "db:generate": "npm --workspace @qr-saas/database run generate",
+    "db:migrate": "npm --workspace @qr-saas/database run migrate"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DATABASE_URL")
+}
+
+enum QRCodeStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  passwordHash  String
+  role          String         @default("member")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  qrCodes       QRCode[]
+  subscription  Subscription?
+}
+
+model QRCode {
+  id          String       @id @default(cuid())
+  userId      String
+  name        String
+  destination String
+  foreground  String       @default("#123b32")
+  background  String       @default("#ffffff")
+  status      QRCodeStatus @default(ACTIVE)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scans       ScanEvent[]
+
+  @@index([userId, status])
+}
+
+model ScanEvent {
+  id         String   @id @default(cuid())
+  qrCodeId   String
+  scannedAt  DateTime @default(now())
+  country    String?
+  deviceType String?
+  source     String?
+  qrCode     QRCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+
+  @@index([qrCodeId, scannedAt])
+}
+
+model Subscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  plan                 String   @default("free")
+  status               String   @default("inactive")
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

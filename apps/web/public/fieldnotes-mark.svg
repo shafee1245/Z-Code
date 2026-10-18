@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title">
+  <title id="title">Fieldnotes Studio mark</title>
+  <rect width="96" height="96" rx="18" fill="#123b32"/>
+  <path d="M28 25h42v10H39v12h27v10H39v18H28z" fill="#fff"/>
+  <circle cx="69" cy="69" r="5" fill="#d27a50"/>
+</svg>
