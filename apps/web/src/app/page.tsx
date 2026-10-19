@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { getApiBaseUrl } from '@/utils/api'
 import QRCodeCanvas from '@/components/QRCodeCanvas'
 import Customizer from '@/components/Customizer'
 import AnalyticsCharts from '@/components/AnalyticsCharts'
@@ -34,7 +35,7 @@ export default function DashboardPage() {
   const handleGenerateAndDownload = async () => {
     setIsGenerating(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL
+      const apiUrl = getApiBaseUrl()
       const supabase = createClient()
       const { data: { session } } = await supabase.auth.getSession()
       const headers: Record<string, string> = {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import { getApiBaseUrl } from '@/utils/api'
 import {
   LineChart,
   Line,
@@ -49,7 +50,7 @@ export default function AnalyticsCharts({ slug }: AnalyticsChartsProps) {
     const fetchAnalytics = async () => {
       setLoading(true)
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL
+        const apiUrl = getApiBaseUrl()
         const supabase = createClient()
         const { data: { session } } = await supabase.auth.getSession()
         const headers: Record<string, string> = {}

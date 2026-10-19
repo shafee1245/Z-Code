@@ -2,6 +2,10 @@ from io import BytesIO
 from typing import Any
 from urllib.parse import urlparse
 import asyncio
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,20 +37,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     return JSONResponse(status_code=422, content={"detail": exc.errors()})
 
-# CORS
-allowed_origins = []
-for o in [settings.web_origin, settings.frontend_url]:
-    if o:
-        allowed_origins.append(o)
-if settings.cors_origins:
-    for o in settings.cors_origins.split(","):
-        o = o.strip()
-        if o and o not in allowed_origins:
-            allowed_origins.append(o)
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins if allowed_origins else [],
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],

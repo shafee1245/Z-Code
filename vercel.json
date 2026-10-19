@@ -1,0 +1,12 @@
+{
+  "builds": [
+    { "src": "apps/web/**", "use": "@vercel/next" },
+    { "src": "apps/api/src/main.py", "use": "@vercel/python" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/apps/api/src/main.py" },
+    { "source": "/s/:slug", "destination": "/apps/api/src/main.py" },
+    { "source": "/s/:slug/(.*)", "destination": "/apps/api/src/main.py" },
+    { "source": "/((?!api/|s/).*)", "destination": "/apps/web" }
+  ]
+}
