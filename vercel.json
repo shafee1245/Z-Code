@@ -5,8 +5,7 @@
   ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/apps/api/src/main.py" },
-    { "source": "/s/:slug", "destination": "/apps/api/src/main.py" },
-    { "source": "/s/:slug/(.*)", "destination": "/apps/api/src/main.py" },
-    { "source": "/((?!api/|s/).*)", "destination": "/apps/web" }
+    { "source": "/s/(.*)", "destination": "/apps/api/src/main.py" },
+    { "source": "/(.*)", "destination": "/apps/web/$1" }
   ]
 }
