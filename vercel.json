@@ -1,6 +1,6 @@
 {
   "builds": [
-    { "src": "apps/web/**", "use": "@vercel/next" },
+    { "src": "apps/web/package.json", "use": "@vercel/next" },
     { "src": "apps/api/src/main.py", "use": "@vercel/python" }
   ],
   "rewrites": [
