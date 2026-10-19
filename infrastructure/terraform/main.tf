@@ -3,4 +3,4 @@ terraform {
 }
 
 # Provider and deployment resources are intentionally not selected yet.
-# Add cloud-specific networking, managed Postgres/Redis, and app services here.
+# Add cloud-specific networking, managed Postgres, and app services here.

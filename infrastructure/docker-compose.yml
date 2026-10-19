@@ -17,18 +17,6 @@ services:
     networks:
       - zcode-network
 
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    container_name: zcode-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - zcode-network
-
   # FastAPI Backend
   api:
     build:
@@ -38,7 +26,6 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://zcode_user:zcode_password@postgres:5432/zcode
-      REDIS_URL: redis://redis:6379
       API_HOST: 0.0.0.0
       API_PORT: 8000
       CORS_ORIGINS: http://localhost:3000,http://web:3000
@@ -48,7 +35,6 @@ services:
       - "8000:8000"
     depends_on:
       - postgres
-      - redis
     volumes:
       - ../apps/api:/app
     networks:
@@ -79,7 +65,6 @@ services:
 
 volumes:
   postgres_data:
-  redis_data:
 
 networks:
   zcode-network:

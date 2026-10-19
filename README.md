@@ -31,7 +31,7 @@ qr-generator-saas/
 │           ├── main.py              # Core API endpoints, CORS, dynamic short-link engine
 │           └── models.py            # DB connection & SQLAlchemy models
 └── infrastructure/
-    └── docker-compose.yml           # Local dev stack (Postgres, Redis, API, Web)
+    └── docker-compose.yml           # Local dev stack (Postgres, API, Web)
 ```
 
 ## 🛠 Tech Stack
@@ -39,7 +39,6 @@ qr-generator-saas/
 - **Frontend**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Recharts, Lucide Icons
 - **Backend**: FastAPI, Python 3.12, SQLAlchemy, Pydantic, Pillow, qrcode
 - **Database**: PostgreSQL (Supabase)
-- **Caching**: Redis
 - **Deployment**: Vercel (Frontend), Railway/Render (Backend), Supabase (DB + Auth)
 
 ---
@@ -76,7 +75,6 @@ docker compose -f infrastructure/docker-compose.yml up --build
 - API: [http://localhost:8000](http://localhost:8000)
 - API Docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 - PostgreSQL: localhost:5432
-- Redis: localhost:6379
 
 ### Option 2: Manual Setup
 
@@ -290,7 +288,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - WEB_ORIGIN
 - CORS_ORIGINS
 - DATABASE_URL
-- REDIS_URL
 - JWT_SECRET
 - SUPABASE_SERVICE_ROLE_KEY
 - ENVIRONMENT=production

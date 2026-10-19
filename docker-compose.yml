@@ -17,7 +17,6 @@ services:
       ENVIRONMENT: development
       WEB_ORIGIN: http://localhost:3000
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-qr}:${POSTGRES_PASSWORD:-qr_dev_password}@db:5432/${POSTGRES_DB:-qr_studio}
-      REDIS_URL: redis://redis:6379/0
       JWT_SECRET: ${JWT_SECRET:-development-only-change-me}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
@@ -26,22 +25,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 10s
       timeout: 3s
       retries: 5
-
-  worker:
-    build: ./apps/api
-    command: ["celery", "-A", "src.worker.celery_app", "worker", "--loglevel=info"]
-    environment:
-      REDIS_URL: redis://redis:6379/0
-    depends_on:
-      redis:
-        condition: service_healthy
 
   db:
     image: postgres:16-alpine
@@ -59,18 +47,5 @@ services:
       timeout: 3s
       retries: 10
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
-
 volumes:
   postgres_data:
-  redis_data:

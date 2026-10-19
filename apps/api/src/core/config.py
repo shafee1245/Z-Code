@@ -11,7 +11,6 @@ class Settings(BaseSettings):
     frontend_url: str = ""
     api_base_url: str = ""
     database_url: str = ""
-    redis_url: str = ""
     jwt_secret: str = ""
     stripe_secret_key: str = ""
     stripe_webhook_secret: str = ""

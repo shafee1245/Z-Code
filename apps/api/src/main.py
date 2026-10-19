@@ -20,7 +20,7 @@ from src.core.database import get_db
 from src.core.security import verify_token
 from src.models import QRCode, ScanAnalytics
 
-limiter = Limiter(key_func=get_remote_address)
+limiter = Limiter(key_func=get_remote_address, storage_uri="memory://")
 app = FastAPI(title="Z-Code API", version="1.0.0")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
